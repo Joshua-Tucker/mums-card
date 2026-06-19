@@ -128,9 +128,18 @@
       font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
       text-transform: uppercase; color: rgba(255,255,255,0.2);
       margin-top: -6px; padding: 4px 8px;
-      transition: color 0.2s;
+      opacity: 0; pointer-events: none;
+      transition: color 0.2s, opacity 0.5s ease;
     }
+    #puzzleSkip.visible { opacity: 1; pointer-events: auto; }
     #puzzleSkip:hover { color: rgba(255,255,255,0.45); }
+    #skipOverlay {
+      position: absolute; inset: 0; z-index: 20;
+      background-image: url('jack.png');
+      background-size: cover; background-position: center top;
+      opacity: 0; transition: opacity 0.8s ease;
+      pointer-events: none;
+    }
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(10px); }
       to   { opacity: 1; transform: none; }
@@ -208,6 +217,7 @@
 
 <!-- ===== SCENE 2: PUZZLE ===== -->
 <div class="scene out" id="sceneJack">
+  <div id="skipOverlay"></div>
   <div class="puzzle-wrap">
     <div class="puzzle-header">
       <p class="puzzle-kicker">When he heard it was your birthday</p>
@@ -371,6 +381,7 @@
     pMoves = 0;
     document.getElementById('moveCount').textContent = 'slide tiles to reveal';
     document.getElementById('puzzleReveal').style.opacity = '0';
+    document.getElementById('puzzleSkip').classList.remove('visible');
     var cont = document.getElementById('puzzleContinue');
     cont.classList.remove('visible');
     cont.style.display = 'none';
@@ -419,6 +430,7 @@
     pMoves++;
     document.getElementById('moveCount').textContent =
       pMoves + ' move' + (pMoves === 1 ? '' : 's');
+    if (pMoves === 20) document.getElementById('puzzleSkip').classList.add('visible');
     puzzleRender();
     if (puzzleSolved()) puzzleOnSolve();
   }
@@ -471,10 +483,17 @@
     scenes.letter.scrollTop = 0;
   });
 
-  /* skip puzzle → letter */
+  /* skip puzzle → full photo reveal → letter */
   document.getElementById('puzzleSkip').addEventListener('click', function () {
-    go('letter');
-    scenes.letter.scrollTop = 0;
+    var overlay = document.getElementById('skipOverlay');
+    overlay.style.pointerEvents = 'auto';
+    overlay.style.opacity = '1';
+    setTimeout(function () {
+      go('letter');
+      scenes.letter.scrollTop = 0;
+      overlay.style.opacity = '0';
+      overlay.style.pointerEvents = 'none';
+    }, 1400);
   });
 
   /* cake button */
