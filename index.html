@@ -20,12 +20,8 @@
       transition: opacity 0.65s ease, transform 0.65s ease;
       will-change: opacity, transform;
     }
-    .scene.out {
-      opacity: 0; pointer-events: none; transform: scale(0.96);
-    }
-    .scene.in {
-      opacity: 1; pointer-events: auto; transform: scale(1);
-    }
+    .scene.out { opacity: 0; pointer-events: none; transform: scale(0.96); }
+    .scene.in  { opacity: 1; pointer-events: auto;  transform: scale(1); }
 
     /* ---------- PETALS ---------- */
     #petalLayer {
@@ -44,9 +40,7 @@
     /* ---------- SCENE 1: COVER ---------- */
     #sceneCover {
       background: linear-gradient(155deg, #fdf8f0 0%, #ede4d0 100%);
-      z-index: 10;
-      text-align: center;
-      padding: 48px 28px;
+      z-index: 10; text-align: center; padding: 48px 28px;
     }
     .cover-inner { position: relative; z-index: 1; max-width: 400px; }
     .cover-blossom {
@@ -65,8 +59,7 @@
     }
     .cover-title em { color: #c07a8e; font-style: normal; display: block; }
     .cover-btn {
-      margin-top: 44px;
-      display: inline-block;
+      margin-top: 44px; display: inline-block;
       background: linear-gradient(135deg, #c49a3c, #8a6a2e);
       color: #fff; border: none; border-radius: 999px;
       padding: 17px 40px; font-size: 16px; font-weight: 700;
@@ -76,59 +69,69 @@
     }
     .cover-btn:active { transform: scale(0.97); }
 
-    /* ---------- SCENE 2: JACK ---------- */
+    /* ---------- SCENE 2: PUZZLE ---------- */
     #sceneJack {
-      background: #080808; z-index: 10; cursor: pointer; overflow: hidden;
+      background: #0c0a0e; z-index: 10; overflow: hidden;
     }
-    #jackImg {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%; object-fit: cover; object-position: center top;
-      opacity: 0; transition: opacity 1.4s ease;
+    .puzzle-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 20px 24px 36px; width: 100%; gap: 14px;
     }
-    #sceneJack.photo-ready #jackImg { opacity: 1; }
-    .jack-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(0,0,0,0.08) 0%,
-        rgba(0,0,0,0.0) 35%,
-        rgba(0,0,0,0.65) 75%,
-        rgba(0,0,0,0.85) 100%
-      );
-    }
-    .jack-text {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      padding: 28px 28px 52px;
-      text-align: center; color: #fff;
-      opacity: 0; transform: translateY(18px);
-      transition: opacity 0.9s ease 0.7s, transform 0.9s ease 0.7s;
-    }
-    #sceneJack.photo-ready .jack-text { opacity: 1; transform: none; }
-    .jack-kicker {
+    .puzzle-header { text-align: center; }
+    .puzzle-kicker {
       font-size: 10px; font-weight: 800; letter-spacing: 0.22em;
-      text-transform: uppercase; color: rgba(255,255,255,0.6);
-      margin-bottom: 10px;
-    }
-    .jack-headline {
-      font-family: 'Fraunces', serif; font-weight: 300; font-style: italic;
-      font-size: clamp(28px, 7.5vw, 46px); line-height: 1.2;
-      margin-bottom: 7px;
-    }
-    .jack-sub {
-      font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 32px;
-    }
-    .jack-tap {
-      font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
       text-transform: uppercase; color: rgba(255,255,255,0.4);
-      animation: breathe 2.2s ease-in-out infinite;
+      margin-bottom: 8px;
     }
-    @keyframes breathe { 0%,100% { opacity: 0.4; } 50% { opacity: 0.9; } }
+    .puzzle-headline {
+      font-family: 'Fraunces', serif; font-weight: 300; font-style: italic;
+      font-size: clamp(24px, 6.5vw, 38px); line-height: 1.2; color: #fff;
+    }
+    #puzzleGrid {
+      position: relative; border-radius: 6px; overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.06);
+      background: #1a1520;
+    }
+    .pt {
+      position: absolute; background-repeat: no-repeat;
+      cursor: pointer;
+      transition: left 0.13s ease, top 0.13s ease;
+    }
+    .pt:active { filter: brightness(1.15); }
+    #puzzleReveal {
+      position: absolute; inset: 0;
+      background-image: url('jack.png');
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      opacity: 0; transition: opacity 0.7s ease;
+      pointer-events: none; z-index: 5;
+    }
+    .puzzle-moves {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.35);
+      min-height: 18px;
+    }
+    #puzzleContinue {
+      display: none;
+      background: linear-gradient(135deg, #c07a8e, #8a4a60);
+      color: #fff; border: none; border-radius: 999px;
+      padding: 16px 38px; font-size: 16px; font-weight: 700;
+      cursor: pointer; letter-spacing: 0.02em;
+      box-shadow: 0 6px 28px rgba(192,122,142,0.5);
+    }
+    #puzzleContinue.visible {
+      display: inline-block;
+      animation: fadeUp 0.45s ease forwards;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: none; }
+    }
 
     /* ---------- SCENE 3: LETTER ---------- */
     #sceneLetter {
       background: linear-gradient(155deg, #fdf8f0 0%, #ede4d0 100%);
-      z-index: 10;
-      justify-content: flex-start;
+      z-index: 10; justify-content: flex-start;
       overflow-y: auto; overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
     }
@@ -146,30 +149,20 @@
     }
     .letter-body {
       font-family: 'Cormorant Garant', serif;
-      font-size: 21px; line-height: 1.75; color: #3d2e52;
-      font-weight: 400;
+      font-size: 21px; line-height: 1.75; color: #3d2e52; font-weight: 400;
     }
     .letter-body p + p { margin-top: 24px; }
-    .letter-closing {
-      margin-top: 44px;
-    }
+    .letter-closing { margin-top: 44px; }
     .letter-love {
       font-family: 'Cormorant Garant', serif; font-size: 22px;
       font-style: italic; font-weight: 400; color: #2d1f3d;
-      display: block; margin-bottom: 6px;
-    }
-    .letter-sig {
-      max-width: 170px; height: auto;
-      mix-blend-mode: multiply;
-      filter: opacity(0.9) sepia(0.15);
+      display: block; margin-bottom: 8px;
     }
     .letter-name {
       font-family: 'Cormorant Garant', serif; font-size: 20px;
-      font-style: italic; color: #6b5070; margin-top: 2px;
+      font-style: italic; color: #6b5070;
     }
-    .letter-end {
-      margin-top: 52px; text-align: center;
-    }
+    .letter-end { margin-top: 52px; text-align: center; }
     .cake-btn {
       background: linear-gradient(135deg, #c07a8e, #8a4a60);
       color: #fff; border: none; border-radius: 999px;
@@ -205,15 +198,18 @@
   </div>
 </div>
 
-<!-- ===== SCENE 2: JACK ===== -->
+<!-- ===== SCENE 2: PUZZLE ===== -->
 <div class="scene out" id="sceneJack">
-  <img src="jack.png" id="jackImg" alt="Happy birthday from Reacher">
-  <div class="jack-overlay"></div>
-  <div class="jack-text">
-    <p class="jack-kicker">When he heard it was your birthday</p>
-    <h2 class="jack-headline">Reacher cleared his schedule.</h2>
-    <p class="jack-sub">He insisted on carrying you out himself. We didn't argue.</p>
-    <p class="jack-tap">Tap anywhere to continue</p>
+  <div class="puzzle-wrap">
+    <div class="puzzle-header">
+      <p class="puzzle-kicker">When he heard it was your birthday</p>
+      <h2 class="puzzle-headline">Piece it together.</h2>
+    </div>
+    <div id="puzzleGrid">
+      <div id="puzzleReveal"></div>
+    </div>
+    <p class="puzzle-moves" id="moveCount"></p>
+    <button id="puzzleContinue">Read your letter &nbsp;→</button>
   </div>
 </div>
 
@@ -229,7 +225,6 @@
     </div>
     <div class="letter-closing">
       <span class="letter-love">Love you lots,</span>
-      <img class="letter-sig" src="signature.png" alt="Joshua">
       <span class="letter-name">Joshua &#x1F90D;</span>
     </div>
     <div class="letter-end">
@@ -293,11 +288,10 @@
 
   /* ---- scene transitions ---- */
   var scenes = {
-    cover:   document.getElementById('sceneCover'),
-    jack:    document.getElementById('sceneJack'),
-    letter:  document.getElementById('sceneLetter')
+    cover:  document.getElementById('sceneCover'),
+    jack:   document.getElementById('sceneJack'),
+    letter: document.getElementById('sceneLetter')
   };
-
   function go(name) {
     Object.keys(scenes).forEach(function (k) {
       scenes[k].classList.toggle('in',  k === name);
@@ -305,17 +299,122 @@
     });
   }
 
-  /* cover → jack */
+  /* ---- SLIDING TILE PUZZLE ---- */
+  var GRID = 3;
+  var GAP  = 3;
+  var pState, pEmpty, pMoves, pTiles, pTileSize, pActualSize;
+
+  function puzzleInit() {
+    var grid = document.getElementById('puzzleGrid');
+    var avW  = Math.min(window.innerWidth - 48, 360);
+    var avH  = window.innerHeight - 200;
+    var raw  = Math.min(avW, avH, 340);
+    pTileSize   = Math.floor((raw - GAP * (GRID - 1)) / GRID);
+    pActualSize = GRID * pTileSize + GAP * (GRID - 1);
+
+    grid.style.width  = pActualSize + 'px';
+    grid.style.height = pActualSize + 'px';
+
+    /* remove any tiles from a previous init */
+    grid.querySelectorAll('.pt').forEach(function (el) { el.remove(); });
+
+    pTiles = [];
+    for (var i = 0; i < 8; i++) {
+      var el  = document.createElement('div');
+      var tc  = i % GRID;
+      var tr  = Math.floor(i / GRID);
+      el.className = 'pt';
+      el.style.width            = pTileSize + 'px';
+      el.style.height           = pTileSize + 'px';
+      el.style.backgroundImage  = "url('jack.png')";
+      el.style.backgroundSize   = pActualSize + 'px ' + pActualSize + 'px';
+      el.style.backgroundPosition =
+        '-' + (tc * (pTileSize + GAP)) + 'px ' +
+        '-' + (tr * (pTileSize + GAP)) + 'px';
+      el.dataset.tile = i;
+      el.addEventListener('click', puzzleMove);
+      grid.appendChild(el);
+      pTiles.push(el);
+    }
+
+    pState = [0,1,2,3,4,5,6,7,8];
+    pEmpty = 8;
+    pMoves = 0;
+    document.getElementById('moveCount').textContent = 'slide tiles to reveal';
+    document.getElementById('puzzleReveal').style.opacity = '0';
+    document.getElementById('puzzleContinue').classList.remove('visible');
+    document.getElementById('puzzleContinue').style.display = 'none';
+
+    puzzleShuffle();
+    puzzleRender();
+  }
+
+  function puzzleNeighbors(pos) {
+    var col = pos % GRID, row = Math.floor(pos / GRID), n = [];
+    if (row > 0)      n.push(pos - GRID);
+    if (row < GRID-1) n.push(pos + GRID);
+    if (col > 0)      n.push(pos - 1);
+    if (col < GRID-1) n.push(pos + 1);
+    return n;
+  }
+
+  function puzzleShuffle() {
+    var last = -1;
+    for (var s = 0; s < 300; s++) {
+      var nbrs = puzzleNeighbors(pEmpty).filter(function (p) { return p !== last; });
+      var pick = nbrs[Math.floor(Math.random() * nbrs.length)];
+      last = pEmpty;
+      pState[pEmpty] = pState[pick];
+      pState[pick]   = 8;
+      pEmpty         = pick;
+    }
+  }
+
+  function puzzleRender() {
+    for (var t = 0; t < 8; t++) {
+      var pos = pState.indexOf(t);
+      var col = pos % GRID, row = Math.floor(pos / GRID);
+      pTiles[t].style.left = (col * (pTileSize + GAP)) + 'px';
+      pTiles[t].style.top  = (row * (pTileSize + GAP)) + 'px';
+    }
+  }
+
+  function puzzleMove() {
+    var tileId = parseInt(this.dataset.tile, 10);
+    var pos    = pState.indexOf(tileId);
+    if (puzzleNeighbors(pos).indexOf(pEmpty) === -1) return;
+    pState[pEmpty] = tileId;
+    pState[pos]    = 8;
+    pEmpty         = pos;
+    pMoves++;
+    document.getElementById('moveCount').textContent =
+      pMoves + ' move' + (pMoves === 1 ? '' : 's');
+    puzzleRender();
+    if (puzzleSolved()) puzzleOnSolve();
+  }
+
+  function puzzleSolved() {
+    for (var i = 0; i < 9; i++) { if (pState[i] !== i) return false; }
+    return true;
+  }
+
+  function puzzleOnSolve() {
+    document.getElementById('puzzleReveal').style.opacity = '1';
+    document.getElementById('moveCount').textContent =
+      '★ Solved in ' + pMoves + ' move' + (pMoves === 1 ? '' : 's') + '!';
+    setTimeout(function () {
+      document.getElementById('puzzleContinue').classList.add('visible');
+    }, 900);
+  }
+
+  /* cover → puzzle */
   document.getElementById('btnOpen').addEventListener('click', function () {
     go('jack');
-    var img = document.getElementById('jackImg');
-    function ready() { scenes.jack.classList.add('photo-ready'); }
-    if (img.complete && img.naturalWidth) { ready(); }
-    else { img.addEventListener('load', ready); img.addEventListener('error', ready); }
+    puzzleInit();
   });
 
-  /* jack → letter */
-  document.getElementById('sceneJack').addEventListener('click', function () {
+  /* puzzle solved → letter */
+  document.getElementById('puzzleContinue').addEventListener('click', function () {
     go('letter');
     scenes.letter.scrollTop = 0;
   });
