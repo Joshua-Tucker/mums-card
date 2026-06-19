@@ -309,11 +309,12 @@
   }
 
   /* ---- SLIDING TILE PUZZLE ---- */
-  var GRID     = 3;
-  var GAP      = 3;
-  var FACE_POS = 2;   /* top-right tile = Mum's face */
-  var EMPTY    = -1;
-  var TILE_SET = [0,1,3,4,5,6,7,8]; /* 8 moveable tiles (skip FACE_POS) */
+  var GRID        = 3;
+  var GAP         = 3;
+  var FACE_POS    = 1;    /* top-centre tile = both heads */
+  var EMPTY       = -1;
+  var TILE_SET    = [0,2,3,4,5,6,7,8]; /* 8 moveable tiles (skip FACE_POS) */
+  var IMG_X_SHIFT = -18;  /* nudge image left so both faces land in col=1 */
   var pState, pEmpty, pMoves, pTiles, pFaceTile, pTileSize, pActualSize;
 
   function puzzleInit() {
@@ -340,7 +341,7 @@
       el.style.backgroundSize   = pActualSize + 'px ' + pActualSize + 'px';
       var tc = t % GRID, tr = Math.floor(t / GRID);
       el.style.backgroundPosition =
-        '-' + (tc * (pTileSize + GAP)) + 'px ' +
+        (-(tc * (pTileSize + GAP)) + IMG_X_SHIFT) + 'px ' +
         '-' + (tr * (pTileSize + GAP)) + 'px';
       el.dataset.tile = t;
       el.addEventListener('click', puzzleMove);
@@ -357,7 +358,7 @@
     pFaceTile.style.backgroundSize   = pActualSize + 'px ' + pActualSize + 'px';
     var fc = FACE_POS % GRID, fr = Math.floor(FACE_POS / GRID);
     pFaceTile.style.backgroundPosition =
-      '-' + (fc * (pTileSize + GAP)) + 'px ' +
+      (-(fc * (pTileSize + GAP)) + IMG_X_SHIFT) + 'px ' +
       '-' + (fr * (pTileSize + GAP)) + 'px';
     pFaceTile.style.zIndex  = '4';
     pFaceTile.style.display = 'none';
@@ -365,7 +366,7 @@
     grid.appendChild(pFaceTile);
 
     /* solved state: tiles at home positions, EMPTY at FACE_POS */
-    pState = [0, 1, EMPTY, 3, 4, 5, 6, 7, 8];
+    pState = [0, EMPTY, 2, 3, 4, 5, 6, 7, 8];
     pEmpty = FACE_POS;
     pMoves = 0;
     document.getElementById('moveCount').textContent = 'slide tiles to reveal';
