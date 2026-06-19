@@ -123,6 +123,14 @@
       display: inline-block;
       animation: fadeUp 0.45s ease forwards;
     }
+    #puzzleSkip {
+      background: none; border: none; cursor: pointer;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.2);
+      margin-top: -6px; padding: 4px 8px;
+      transition: color 0.2s;
+    }
+    #puzzleSkip:hover { color: rgba(255,255,255,0.45); }
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(10px); }
       to   { opacity: 1; transform: none; }
@@ -210,6 +218,7 @@
     </div>
     <p class="puzzle-moves" id="moveCount"></p>
     <button id="puzzleContinue">Read your letter &nbsp;→</button>
+    <button id="puzzleSkip">skip puzzle &nbsp;→</button>
   </div>
 </div>
 
@@ -380,7 +389,7 @@
 
   function puzzleShuffle() {
     var last = -1;
-    for (var s = 0; s < 300; s++) {
+    for (var s = 0; s < 60; s++) {
       var nbrs = puzzleNeighbors(pEmpty).filter(function (p) { return p !== last; });
       var pick = nbrs[Math.floor(Math.random() * nbrs.length)];
       last = pEmpty;
@@ -457,6 +466,12 @@
 
   /* puzzle solved → letter */
   document.getElementById('puzzleContinue').addEventListener('click', function () {
+    go('letter');
+    scenes.letter.scrollTop = 0;
+  });
+
+  /* skip puzzle → letter */
+  document.getElementById('puzzleSkip').addEventListener('click', function () {
     go('letter');
     scenes.letter.scrollTop = 0;
   });
