@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <title>Happy Birthday, Mum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Cormorant+Garant:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; }
+    body { height: 100%; font-family: 'Inter', sans-serif; background: #f5f0e8; color: #2d1f3d; overflow: hidden; }
+
+    /* ---------- SCENE SYSTEM ---------- */
+    .scene {
+      position: fixed; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      transition: opacity 0.65s ease, transform 0.65s ease;
+      will-change: opacity, transform;
+    }
+    .scene.out {
+      opacity: 0; pointer-events: none; transform: scale(0.96);
+    }
+    .scene.in {
+      opacity: 1; pointer-events: auto; transform: scale(1);
+    }
+
+    /* ---------- PETALS ---------- */
+    #petalLayer {
+      position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden;
+    }
+    .petal {
+      position: absolute; top: -30px; border-radius: 60% 40% 60% 40%;
+      opacity: 0.85; animation: petalFall linear forwards;
+    }
+    @keyframes petalFall {
+      0%   { transform: translateY(0)     rotate(0deg)   translateX(0);    opacity: 0.9; }
+      50%  { transform: translateY(55vh)  rotate(180deg) translateX(20px); opacity: 0.7; }
+      100% { transform: translateY(115vh) rotate(360deg) translateX(-10px); opacity: 0; }
+    }
+
+    /* ---------- SCENE 1: COVER ---------- */
+    #sceneCover {
+      background: linear-gradient(155deg, #fdf8f0 0%, #ede4d0 100%);
+      z-index: 10;
+      text-align: center;
+      padding: 48px 28px;
+    }
+    .cover-inner { position: relative; z-index: 1; max-width: 400px; }
+    .cover-blossom {
+      font-size: 52px; display: block; margin-bottom: 20px;
+      animation: bob 3.5s ease-in-out infinite;
+    }
+    @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    .cover-eyebrow {
+      font-size: 10.5px; font-weight: 800; letter-spacing: 0.2em;
+      text-transform: uppercase; color: #8a7050; margin-bottom: 18px;
+    }
+    .cover-title {
+      font-family: 'Fraunces', serif; font-weight: 300;
+      font-size: clamp(46px, 11vw, 76px); line-height: 1.08;
+      color: #2d1f3d; margin-bottom: 10px;
+    }
+    .cover-title em { color: #c07a8e; font-style: normal; display: block; }
+    .cover-btn {
+      margin-top: 44px;
+      display: inline-block;
+      background: linear-gradient(135deg, #c49a3c, #8a6a2e);
+      color: #fff; border: none; border-radius: 999px;
+      padding: 17px 40px; font-size: 16px; font-weight: 700;
+      cursor: pointer; letter-spacing: 0.03em;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .cover-btn:active { transform: scale(0.97); }
+
+    /* ---------- SCENE 2: JACK ---------- */
+    #sceneJack {
+      background: #080808; z-index: 10; cursor: pointer; overflow: hidden;
+    }
+    #jackImg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover; object-position: center top;
+      opacity: 0; transition: opacity 1.4s ease;
+    }
+    #sceneJack.photo-ready #jackImg { opacity: 1; }
+    .jack-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.08) 0%,
+        rgba(0,0,0,0.0) 35%,
+        rgba(0,0,0,0.65) 75%,
+        rgba(0,0,0,0.85) 100%
+      );
+    }
+    .jack-text {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 28px 28px 52px;
+      text-align: center; color: #fff;
+      opacity: 0; transform: translateY(18px);
+      transition: opacity 0.9s ease 0.7s, transform 0.9s ease 0.7s;
+    }
+    #sceneJack.photo-ready .jack-text { opacity: 1; transform: none; }
+    .jack-kicker {
+      font-size: 10px; font-weight: 800; letter-spacing: 0.22em;
+      text-transform: uppercase; color: rgba(255,255,255,0.6);
+      margin-bottom: 10px;
+    }
+    .jack-headline {
+      font-family: 'Fraunces', serif; font-weight: 300; font-style: italic;
+      font-size: clamp(28px, 7.5vw, 46px); line-height: 1.2;
+      margin-bottom: 7px;
+    }
+    .jack-sub {
+      font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 32px;
+    }
+    .jack-tap {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: rgba(255,255,255,0.4);
+      animation: breathe 2.2s ease-in-out infinite;
+    }
+    @keyframes breathe { 0%,100% { opacity: 0.4; } 50% { opacity: 0.9; } }
+
+    /* ---------- SCENE 3: LETTER ---------- */
+    #sceneLetter {
+      background: linear-gradient(155deg, #fdf8f0 0%, #ede4d0 100%);
+      z-index: 10;
+      justify-content: flex-start;
+      overflow-y: auto; overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+    .letter-wrap {
+      width: 100%; max-width: 560px; margin: 0 auto;
+      padding: 60px 28px 90px;
+    }
+    .letter-date {
+      font-size: 11px; font-weight: 800; letter-spacing: 0.18em;
+      text-transform: uppercase; color: #9a7c55; margin-bottom: 36px;
+    }
+    .letter-salutation {
+      font-family: 'Fraunces', serif; font-size: 34px; font-weight: 300;
+      color: #2d1f3d; margin-bottom: 28px;
+    }
+    .letter-body {
+      font-family: 'Cormorant Garant', serif;
+      font-size: 21px; line-height: 1.75; color: #3d2e52;
+      font-weight: 400;
+    }
+    .letter-body p + p { margin-top: 24px; }
+    .letter-closing {
+      margin-top: 44px;
+    }
+    .letter-love {
+      font-family: 'Cormorant Garant', serif; font-size: 22px;
+      font-style: italic; font-weight: 400; color: #2d1f3d;
+      display: block; margin-bottom: 6px;
+    }
+    .letter-sig {
+      max-width: 170px; height: auto;
+      mix-blend-mode: multiply;
+      filter: opacity(0.9) sepia(0.15);
+    }
+    .letter-name {
+      font-family: 'Cormorant Garant', serif; font-size: 20px;
+      font-style: italic; color: #6b5070; margin-top: 2px;
+    }
+    .letter-end {
+      margin-top: 52px; text-align: center;
+    }
+    .cake-btn {
+      background: linear-gradient(135deg, #c07a8e, #8a4a60);
+      color: #fff; border: none; border-radius: 999px;
+      padding: 18px 42px; font-size: 17px; font-weight: 700;
+      cursor: pointer; letter-spacing: 0.02em;
+      box-shadow: 0 6px 28px rgba(192,122,142,0.45);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .cake-btn:active { transform: scale(0.96); }
+
+    /* ---------- CONFETTI ---------- */
+    #confettiLayer {
+      position: fixed; inset: 0; pointer-events: none; z-index: 200; overflow: hidden;
+    }
+    @keyframes cfall {
+      0%   { transform: translateY(-20px) rotate(0deg)   translateX(0);     opacity: 1; }
+      100% { transform: translateY(110vh) rotate(540deg) translateX(var(--cx)); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="petalLayer"></div>
+<div id="confettiLayer"></div>
+
+<!-- ===== SCENE 1: COVER ===== -->
+<div class="scene in" id="sceneCover">
+  <div class="cover-inner">
+    <span class="cover-blossom">🌸</span>
+    <p class="cover-eyebrow">Siobhaan &middot; 20 June</p>
+    <h1 class="cover-title">Happy Birthday,<em>Mum</em></h1>
+    <button class="cover-btn" id="btnOpen">Open your card &nbsp;→</button>
+  </div>
+</div>
+
+<!-- ===== SCENE 2: JACK ===== -->
+<div class="scene out" id="sceneJack">
+  <img src="jack.png" id="jackImg" alt="Happy birthday from Reacher">
+  <div class="jack-overlay"></div>
+  <div class="jack-text">
+    <p class="jack-kicker">When he heard it was your birthday</p>
+    <h2 class="jack-headline">Reacher cleared his schedule.</h2>
+    <p class="jack-sub">He insisted on carrying you out himself. We didn't argue.</p>
+    <p class="jack-tap">Tap anywhere to continue</p>
+  </div>
+</div>
+
+<!-- ===== SCENE 3: LETTER ===== -->
+<div class="scene out" id="sceneLetter">
+  <div class="letter-wrap">
+    <p class="letter-date">20 June 2026</p>
+    <p class="letter-salutation">Mum,</p>
+    <div class="letter-body">
+      <p>I hope today is a relaxing day for you. I'm happy that I'm here for his birthday after missing the last two. Coming back has been something I've been dreading for a long time, yet you've welcomed me back with open arms, indulge me in my rants about Claude and support me when I've been at my lowest.</p>
+      <p>And you continually do this. Even when I was away there was a few phone calls that I made to you that really helped me in the dark moments. You've helped me more than you'll ever know and I'm proud to call you my mum.</p>
+      <p>I've really enjoyed being back, thank you for reminding me how lovely home can be. I think you're fantastic and I'm really grateful for everything you do and all that you are.</p>
+    </div>
+    <div class="letter-closing">
+      <span class="letter-love">Love you lots,</span>
+      <img class="letter-sig" src="signature.png" alt="Joshua">
+      <span class="letter-name">Joshua &#x1F90D;</span>
+    </div>
+    <div class="letter-end">
+      <button class="cake-btn" id="cakeBtn">Happy Birthday, Mum 🎂</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---- petals ---- */
+  var petalLayer = document.getElementById('petalLayer');
+  var petalPalette = ["#f6dde4","#f3d8df","#ecd39a","#dbe4cd","#e8e0f0","#fce4b8"];
+  function spawnPetal() {
+    var el = document.createElement('div');
+    el.className = 'petal';
+    var size = 10 + Math.random() * 10;
+    el.style.cssText = [
+      'left:' + (Math.random() * 105) + 'vw',
+      'width:' + size + 'px',
+      'height:' + (size * 1.4) + 'px',
+      'background:' + petalPalette[Math.floor(Math.random() * petalPalette.length)],
+      'animation-duration:' + (7 + Math.random() * 9) + 's',
+      'animation-delay:' + (Math.random() * 1.5) + 's'
+    ].join(';');
+    petalLayer.appendChild(el);
+    setTimeout(function () { el.remove(); }, 18000);
+  }
+  for (var p = 0; p < 10; p++) setTimeout(spawnPetal, p * 200);
+  setInterval(spawnPetal, 800);
+
+  /* ---- confetti ---- */
+  var confettiLayer = document.getElementById('confettiLayer');
+  var confettiColors = ['#f6dde4','#c07a8e','#ecd39a','#c49a3c','#9bad84','#7d8e6a','#b8d0f0','#e8c0d0'];
+  function burst() {
+    for (var i = 0; i < 120; i++) {
+      (function (i) {
+        setTimeout(function () {
+          var el = document.createElement('div');
+          var size = 6 + Math.random() * 8;
+          var cx = (Math.random() * 160 - 80) + 'px';
+          el.style.cssText = [
+            'position:absolute',
+            'width:' + size + 'px',
+            'height:' + (Math.random() > 0.5 ? size : size * 0.45) + 'px',
+            'background:' + confettiColors[Math.floor(Math.random() * confettiColors.length)],
+            'border-radius:' + (Math.random() > 0.4 ? '50%' : '2px'),
+            'left:' + (10 + Math.random() * 80) + '%',
+            'top:0',
+            '--cx:' + cx,
+            'animation:cfall ' + (1.6 + Math.random() * 2.2) + 's ease-in forwards'
+          ].join(';');
+          confettiLayer.appendChild(el);
+          setTimeout(function () { el.remove(); }, 5000);
+        }, i * 18);
+      })(i);
+    }
+  }
+
+  /* ---- scene transitions ---- */
+  var scenes = {
+    cover:   document.getElementById('sceneCover'),
+    jack:    document.getElementById('sceneJack'),
+    letter:  document.getElementById('sceneLetter')
+  };
+
+  function go(name) {
+    Object.keys(scenes).forEach(function (k) {
+      scenes[k].classList.toggle('in',  k === name);
+      scenes[k].classList.toggle('out', k !== name);
+    });
+  }
+
+  /* cover → jack */
+  document.getElementById('btnOpen').addEventListener('click', function () {
+    go('jack');
+    var img = document.getElementById('jackImg');
+    function ready() { scenes.jack.classList.add('photo-ready'); }
+    if (img.complete && img.naturalWidth) { ready(); }
+    else { img.addEventListener('load', ready); img.addEventListener('error', ready); }
+  });
+
+  /* jack → letter */
+  document.getElementById('sceneJack').addEventListener('click', function () {
+    go('letter');
+    scenes.letter.scrollTop = 0;
+  });
+
+  /* cake button */
+  document.getElementById('cakeBtn').addEventListener('click', function () {
+    burst();
+    this.textContent = '🎂 Love you, Mum!';
+    this.style.background = 'linear-gradient(135deg, #7d8e6a, #4a6a38)';
+  });
+
+})();
+</script>
+</body>
+</html>
