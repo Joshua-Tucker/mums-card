@@ -134,7 +134,7 @@
     #puzzleSkip.visible { opacity: 1; pointer-events: auto; }
     #puzzleSkip:hover { color: rgba(255,255,255,0.45); }
     #skipOverlay {
-      position: absolute; inset: 0; z-index: 20;
+      position: fixed; inset: 0; z-index: 100;
       background-image: url('jack.png');
       background-size: cover; background-position: center top;
       opacity: 0; transition: opacity 0.8s ease;
@@ -204,6 +204,7 @@
 
 <div id="petalLayer"></div>
 <div id="confettiLayer"></div>
+<div id="skipOverlay"></div>
 
 <!-- ===== SCENE 1: COVER ===== -->
 <div class="scene in" id="sceneCover">
@@ -217,7 +218,6 @@
 
 <!-- ===== SCENE 2: PUZZLE ===== -->
 <div class="scene out" id="sceneJack">
-  <div id="skipOverlay"></div>
   <div class="puzzle-wrap">
     <div class="puzzle-header">
       <p class="puzzle-kicker">When he heard it was your birthday</p>
@@ -384,7 +384,7 @@
     document.getElementById('puzzleSkip').classList.remove('visible');
     var cont = document.getElementById('puzzleContinue');
     cont.classList.remove('visible');
-    cont.style.display = 'none';
+    cont.style.display = '';
 
     puzzleShuffle();
     puzzleRender();
@@ -491,9 +491,11 @@
     setTimeout(function () {
       go('letter');
       scenes.letter.scrollTop = 0;
-      overlay.style.opacity = '0';
-      overlay.style.pointerEvents = 'none';
-    }, 1400);
+      setTimeout(function () {
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+      }, 600);
+    }, 1200);
   });
 
   /* cake button */
